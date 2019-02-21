@@ -4,6 +4,5 @@ FlowingData recently posted [*Optimized Brewery Road Trip, With Genetic Algorith
 
 [The Brewers Association][2] shows that there are 8,993 breweries in the US (as of 2019-02-21) and there seems to be a lot of wasted travel if you only visit the top 71 breweries on a tour around the US. Can we find an optimal path for visiting all of these breweries? How many additional miles would we end up driving? How much additional time would it take?
 
-## Links
 [1]: https://flowingdata.com/2019/02/08/optimized-brewery-road-trip-with-genetic-algorithm/
 [2]: https://www.brewersassociation.org/directories/breweries/
