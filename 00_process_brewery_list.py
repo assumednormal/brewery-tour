@@ -32,17 +32,21 @@ An example:
 We only care about addresses, which are broken over two list items.
   <li class="address">624 Main St East</li>
   <li>Menomonie, WI 54751 | <a ...>Map</a></li>
+
+And we only care about addresses that are valid.
 """
 
 breweries = soup.findAll("div", {"class": "brewery"})
 
 def get_address(brewery):
-    line1 = brewery.select_one("li.address")
-    line2 = brewery.select_one("li.address + li")
-    if len(line1.text) < 2:
+    line1 = brewery.select_one("li.address").text.strip()
+    line2 = brewery.select_one("li.address + li").text.replace(" | Map", "").strip()
+    if len(line1) < 2 or len(line2) < 2:
         return ""
-    return line1.text + line2.text.replace(" | Map", "")
+    return line1 + " " + line2
 
-addresses = list(map(get_address, breweries))
+addresses = map(get_address, breweries)
+valid_addresses = filter(lambda addr: len(addr) > 0, addresses)
 
-print(addresses)
+with open("us-breweries-w-valid-addresses.txt", "w") as f:
+    f.writelines("\n".join(valid_addresses))
