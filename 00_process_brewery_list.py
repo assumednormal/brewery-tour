@@ -6,6 +6,8 @@ You can use the same file I use here or get an updated list by visiting
 and searching for all US-based breweries.
 """
 
+import json
+
 from bs4 import BeautifulSoup
 
 with open("us-breweries.xml", "r") as f:
@@ -41,12 +43,14 @@ breweries = soup.findAll("div", {"class": "brewery"})
 def get_address(brewery):
     line1 = brewery.select_one("li.address").text.strip()
     line2 = brewery.select_one("li.address + li").text.replace(" | Map", "").strip()
+    address = line1 + " " + line2
     if len(line1) < 2 or len(line2) < 2:
-        return ""
-    return line1 + " " + line2
+        address = ""
+    name = brewery.select_one("li.name").text.strip()
+    return {"name": name, "address": address}
 
 addresses = map(get_address, breweries)
-valid_addresses = filter(lambda addr: len(addr) > 0, addresses)
+valid_addresses = filter(lambda brewery: len(brewery["address"]) > 0, addresses)
 
-with open("us-breweries-w-valid-addresses.txt", "w") as f:
-    f.writelines("\n".join(valid_addresses))
+with open("us-breweries-with-valid-addresses.json", "w") as f:
+    json.dump(list(valid_addresses), f)
